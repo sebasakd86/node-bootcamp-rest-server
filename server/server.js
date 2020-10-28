@@ -30,6 +30,6 @@ app.delete('/usuario', function (req, res) {
     res.json('delete')
 })
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
     console.log('Escuchando', process.env.PORT)
 })
