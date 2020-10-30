@@ -16,7 +16,7 @@ const connectionOptions = {
     useCreateIndex: true
 }
 
-mongoose.connect('mongodb://localhost/cafe', connectionOptions, (err, res) => {
+mongoose.connect(process.env.URL_DB, connectionOptions, (err, res) => {
     if (err)
         throw err
     console.log(`\n ---> Se conecto con la BD`)

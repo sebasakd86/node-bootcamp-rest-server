@@ -3,23 +3,24 @@ const express = require('express')
 const Usuario = require('../models/usuario')
 const bcrypt = require('bcrypt')
 const _ = require('underscore')
+const usuario = require('../models/usuario')
 const app = express()
 
 app.get('/usuario', function (req, res) {
+    let estado = { estado: true }
     let dsd = Number(req.query.desde) || 0
     let tamPagina = Number(req.query.limite) || 5
-    Usuario.find({}, 'nombre email estado google role img')
+    Usuario.find(estado, 'nombre email estado google role img')
         .skip(dsd)
         .limit(tamPagina)
         .exec((err, usrsDB) => {
             if (err)
                 return res.status(400).json(responseError(err))
-            Usuario.countDocuments({}, (err, cant) => {
-                if(err)
+            Usuario.countDocuments(estado, (err, cant) => {
+                if (err)
                     return res.status(400).json(responseError(err))
-                return res.json(responseOk({usrsDB, conteo: cant}))
+                return res.json(responseOk({ usrsDB, conteo: cant }))
             })
-            
         })
 })
 app.post('/usuario', function (req, res) {
@@ -46,8 +47,25 @@ app.put('/usuario/:id', function (req, res) {
         res.json(responseOk(usrDB))
     })
 })
-app.delete('/usuario', function (req, res) {
-    res.json('delete')
+app.delete('/usuario/:id', function (req, res) {
+    let id = req.params.id
+    /*
+    Usuario.findByIdAndRemove(id, (err, usrBorrado) => {
+        if (err)
+            return res.status(400).json(responseError(err))
+        if(!usrBorrado)
+        return res.status(400).json(responseError({msg: 'Usuario no encontrado'}))
+            res.json(responseOk(usrBorrado))
+    })
+    */
+    Usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true }, (err, usrDB) => {
+        if (err)
+            return res.status(400).json(responseError(err))
+        if (!usrDB)
+            return res.status(400).json(responseError({ msg: 'Usuario no encontrado' }))
+
+        res.json(responseOk(usrDB))
+    })
 })
 
 const responseError = (err) => {
