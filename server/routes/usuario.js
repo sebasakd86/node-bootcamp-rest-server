@@ -3,7 +3,6 @@ const express = require('express')
 const Usuario = require('../models/usuario')
 const bcrypt = require('bcrypt')
 const _ = require('underscore')
-const usuario = require('../models/usuario')
 const app = express()
 
 app.get('/usuario', function (req, res) {

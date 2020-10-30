@@ -8,7 +8,8 @@ const app = express()
 //Middleware
 app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()) // parse application/json
-app.use(require('./routes/usuario'))
+
+app.use(require('./routes/index'))
 
 const connectionOptions = {
     useNewUrlParser: true,
