@@ -15,3 +15,5 @@ process.env.URL_DB = urlDB
 // Vencimiento del token
 process.env.CADUCIDAD_TOKEN = 60*60*24*30
 process.env.SEED_TOKEN = process.env.SEED_TOKEN || 'abcdefghijklmnopqrstuvwxyz'
+//Google
+process.env.GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '477252317453-i56mj690ccn71fpjdf1o68f5esv2innh.apps.googleusercontent.com'
