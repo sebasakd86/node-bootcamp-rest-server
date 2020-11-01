@@ -56,7 +56,7 @@ app.delete('/usuario/:id', [verificarToken, verificaAdminRole], function (req, r
         if(!usrBorrado)
         return res.status(400).json(responseError({msg: 'Usuario no encontrado'}))
             res.json(responseOk(usrBorrado))
-    })git config --global user.name "narbaysebas@gmail.com"
+    })
     */
     Usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true }, (err, usrDB) => {
         if (err)
