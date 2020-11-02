@@ -8,6 +8,8 @@ let Categoria = require('../models/categoria')
 
 app.get('/categoria', verificarToken, (req, res) => {
     Categoria.find({}, 'descripcion usuario')
+        .sort('descripcion')
+        .populate('usuario', 'nombre email')
         .exec((err, categoriaDB) => {
             if (err)
                 return res.status(400).json(responseError(err))
@@ -52,7 +54,7 @@ app.put('/categoria/:id', verificarToken, (req, res) => {
     Categoria.findByIdAndUpdate(id, desc, {
         new: true,
         runValidators: true,
-        context: 'query' 
+        context: 'query'
     }, (err, catDB) => {
         if (err)
             return res.status(400).json(responseError(err))
