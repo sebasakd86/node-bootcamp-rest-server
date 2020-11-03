@@ -3,6 +3,10 @@ let {
     verificarToken,
     verificaAdminRole
 } = require('../middlewares/autenticacion')
+const {
+    responseError,
+    responseOk
+} = require('./responses')
 let app = express()
 let Categoria = require('../models/categoria')
 
@@ -73,18 +77,5 @@ app.delete('/categoria/:id', [verificarToken, verificaAdminRole], (req, res) => 
         res.json(responseOk(catBorrada))
     })
 }) //solo un admin puede borrar, se BORRA de prepo
-
-const responseError = (err) => {
-    return {
-        ok: false,
-        err
-    }
-}
-const responseOk = (obj) => {
-    return {
-        ok: true,
-        obj
-    }
-}
 
 module.exports = app

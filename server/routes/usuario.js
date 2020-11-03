@@ -1,13 +1,21 @@
-const { response } = require('express')
 const express = require('express')
 const Usuario = require('../models/usuario')
-const { verificarToken, verificaAdminRole } = require('../middlewares/autenticacion')
+const {
+    verificarToken,
+    verificaAdminRole
+} = require('../middlewares/autenticacion')
+const {
+    responseError,
+    responseOk
+} = require('./responses')
 const bcrypt = require('bcrypt')
 const _ = require('underscore')
 const app = express()
 
 app.get('/usuario', verificarToken, function (req, res) {
-    let estado = { estado: true }
+    let estado = {
+        estado: true
+    }
     let dsd = Number(req.query.desde) || 0
     let tamPagina = Number(req.query.limite) || 5
     Usuario.find(estado, 'nombre email estado google role img')
@@ -19,7 +27,10 @@ app.get('/usuario', verificarToken, function (req, res) {
             Usuario.countDocuments(estado, (err, cant) => {
                 if (err)
                     return res.status(400).json(responseError(err))
-                return res.json(responseOk({ usrsDB, conteo: cant }))
+                return res.json(responseOk({
+                    usrsDB,
+                    conteo: cant
+                }))
             })
         })
 })
@@ -41,7 +52,10 @@ app.put('/usuario/:id', [verificarToken, verificaAdminRole], function (req, res)
     let id = req.params.id
     let body = _.pick(req.body, ['nombre', 'img', 'email', 'role', 'estado'])
 
-    Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usrDB) => {
+    Usuario.findByIdAndUpdate(id, body, {
+        new: true,
+        runValidators: true
+    }, (err, usrDB) => {
         if (err)
             return res.status(400).json(responseError(err))
         res.json(responseOk(usrDB))
@@ -58,27 +72,21 @@ app.delete('/usuario/:id', [verificarToken, verificaAdminRole], function (req, r
             res.json(responseOk(usrBorrado))
     })
     */
-    Usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true }, (err, usrDB) => {
+    Usuario.findByIdAndUpdate(id, {
+        estado: false
+    }, {
+        new: true,
+        runValidators: true
+    }, (err, usrDB) => {
         if (err)
             return res.status(400).json(responseError(err))
         if (!usrDB)
-            return res.status(400).json(responseError({ msg: 'Usuario no encontrado' }))
+            return res.status(400).json(responseError({
+                msg: 'Usuario no encontrado'
+            }))
 
         res.json(responseOk(usrDB))
     })
 })
-
-const responseError = (err) => {
-    return {
-        ok: false,
-        err
-    }
-}
-const responseOk = (obj) => {
-    return {
-        ok: true,
-        obj
-    }
-}
 
 module.exports = app

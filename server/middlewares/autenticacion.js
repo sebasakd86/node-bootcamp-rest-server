@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { responseError } = require('../routes/responses')
 
 let verificarToken = (req, res, next) => {
     let token = req.get('token')
@@ -14,9 +15,9 @@ let verificarToken = (req, res, next) => {
     })
 }
 
-let verificaAdminRole = (req, res,next) => {
+let verificaAdminRole = (req, res, next) => {
     let u = req.usuario;
-    if(u.role != 'ADMIN_ROLE')
+    if (u.role != 'ADMIN_ROLE')
         return res.json({
             ok: false,
             err: 'Usuario no es Administrador'
@@ -24,7 +25,19 @@ let verificaAdminRole = (req, res,next) => {
     next()
 }
 
+let verificaTokenImg = (req, res, next) => {
+    
+    let token = req.query.token
+    jwt.verify(token, process.env.SEED_TOKEN, (err, decoded) => {
+        if (err)
+            return res.status(401).json( responseError(err))
+        req.usuario = decoded.usuario
+        next()
+    })
+}
+
 module.exports = {
     verificarToken,
-    verificaAdminRole
+    verificaAdminRole,
+    verificaTokenImg
 }

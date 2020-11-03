@@ -8,6 +8,11 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const _ = require('underscore')
 const app = express()
 
+const {
+    responseError,
+    responseOk
+} = require('./responses')
+
 app.post('/login', (req, res) => {
     let body = req.body
     Usuario.findOne({ email: body.email }, (err, usrDB) => {
@@ -85,18 +90,5 @@ app.post('/google', async (req, res) => {
         }
     })
 })
-
-const responseError = (err) => {
-    return {
-        ok: false,
-        err
-    }
-}
-const responseOk = (obj) => {
-    return {
-        ok: true,
-        obj
-    }
-}
 
 module.exports = app

@@ -3,6 +3,10 @@ let {
     verificarToken,
     verificaAdminRole
 } = require('../middlewares/autenticacion')
+const {
+    responseError,
+    responseOk
+} = require('./responses')
 let app = express()
 let Producto = require('../models/producto')
 
@@ -121,18 +125,5 @@ app.delete('/producto/:id', [verificarToken], (req, res) => {
         return res.json(responseOk(prodDB))
     })
 })
-
-const responseError = (err) => {
-    return {
-        ok: false,
-        err
-    }
-}
-const responseOk = (obj) => {
-    return {
-        ok: true,
-        obj
-    }
-}
 
 module.exports = app
